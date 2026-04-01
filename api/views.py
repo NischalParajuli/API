@@ -12,11 +12,13 @@ from rest_framework import mixins
 # from rest_framework import generics
 
 from rest_framework.viewsets import ModelViewSet, ViewSet
+from .pagination import FoodPagination , CategoryPagination , TablePagination
 # -------------------------------ModelViewSet-----------------------------------------------
 
 class CategoryModelViewSet(ModelViewSet):
     queryset = Category.objects.all()
     serializer_class = CategorySerializer
+    pagination_class = CategoryPagination
 
     def destroy (self, request, id):
         category = Category.objects.get(id=id)
@@ -30,6 +32,7 @@ class CategoryModelViewSet(ModelViewSet):
 class TableModelViewSet(ModelViewSet):
     queryset = Table.objects.all()
     serializer_class = TableSerializer
+    pagination_class = TablePagination
 
     def destroy (self, request, id):
         table = Table.objects.get(id=id)
@@ -38,6 +41,17 @@ class TableModelViewSet(ModelViewSet):
             return Response({"detail": "protected error: Data cannot be deleted"})
         table.delete()
         return Response({"detail": "Data has been deleted."})
+
+
+
+class FoodModelViewSet(ModelViewSet):
+    queryset = Food.objects.all().select_related('category')
+    serializer_class = FoodSerializer
+    pagination_class = FoodPagination
+
+
+
+
 #-------------------------------Function-Based Views-----------------------------------------------
 
 # @api_view(['GET', 'POST'])

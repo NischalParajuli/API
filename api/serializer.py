@@ -7,12 +7,27 @@ class CategorySerializer(serializers.ModelSerializer):
     class Meta:
         model = Category
         fields = '__all__'
-        #exclude = ['id'] # to exclude id field from the serialized output
+        #exclude = ['id']  to exclude id field from the serialized output
 
 class TableSerializer(serializers.ModelSerializer):
     class Meta:
         model = Table
         fields = '__all__'
+
+class FoodSerializer(serializers.ModelSerializer):
+    category_id = serializers.PrimaryKeyRelatedField(queryset=Category.objects.all(), source='category') # to accept category id in the request data
+    category = serializers.StringRelatedField() # to display category name instead of id
+    price_with_vat = serializers.SerializerMethodField() # to calculate price with VAT
+    price_with_discount = serializers.SerializerMethodField() # to calculate price with discount
+    class Meta:
+        model = Food
+        fields = '__all__'
+
+    def get_price_with_vat(self, food):
+        return food.price + food.price * 0.12  #  12% VAT
+    
+    def get_price_with_discount(self, food):
+        return food.price - food.price * 0.1  #  10% discount
 
 
 # class CategorySerializer(serializers.Serializer):

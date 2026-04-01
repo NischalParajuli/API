@@ -4,6 +4,8 @@ from rest_framework import routers
 
 router = routers.SimpleRouter()
 router.register('category', CategoryModelViewSet, basename='category')
+router.register('table', TableModelViewSet, basename='table')
+router.register('food', FoodModelViewSet, basename='food')
 # router.register('category_detail', CategoryDetail, basename='category_detail')
 # router.register('table', TableViewSet, basename='table')
 # router.register('table_detail', TableDetail, basename='table_detail')
