@@ -1,8 +1,8 @@
-from typing import Generic
-from urllib import request
+# from typing import Generic
+# from urllib import request
 from django.shortcuts import render
-import rest_framework
-from rest_framework.decorators import api_view
+# import rest_framework
+# from rest_framework.decorators import api_view
 from rest_framework.response import Response
 from .models import *
 from .serializer import *
@@ -43,11 +43,17 @@ class TableModelViewSet(ModelViewSet):
         return Response({"detail": "Data has been deleted."})
 
 
-
+from rest_framework import filters
+from django_filters.rest_framework import DjangoFilterBackend
+from .filters import FoodFilter
 class FoodModelViewSet(ModelViewSet):
     queryset = Food.objects.all().select_related('category')
     serializer_class = FoodSerializer
     pagination_class = FoodPagination
+    filter_backends = [filters.SearchFilter, DjangoFilterBackend]
+    search_fields = ['name']
+    # filterset_fields = ['category']
+    filterset_class = FoodFilter
 
 
 
