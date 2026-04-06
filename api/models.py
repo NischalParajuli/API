@@ -1,12 +1,14 @@
 from django.db import models
 from django.contrib.auth import get_user_model
+
 User = get_user_model()
-# from django.contrib.auth.models import User
-# Create your models here.
+
+
 class Category(models.Model):
-   name = models.CharField(max_length=50)     # Breakfast, Lunch, Dinner, Drinks
-   def __str__(self):
-      return self.name
+    name = models.CharField(max_length=50)  # Breakfast, Lunch, Dinner, Drinks
+
+    def __str__(self):
+        return self.name
 
 class Food(models.Model):
    name = models.CharField(max_length=100)   # abc, xyz
@@ -30,6 +32,7 @@ class Order(models.Model):
       ('Delivered','Delivered')
    ]
    user = models.ForeignKey(User, on_delete=models.CASCADE)
+   table = models.ForeignKey(Table, on_delete=models.PROTECT, null=True, blank=True)
    total_price = models.IntegerField(null=True, blank=True)
    status = models.CharField(max_length=10, choices=status_choice, default="Pending", null=True, blank=True)
    
