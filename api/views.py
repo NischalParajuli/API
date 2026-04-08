@@ -48,4 +48,12 @@ class FoodModelViewSet(ModelViewSet):
     filterset_class = FoodFilter
 
 
+class OrderModelViewSet(ModelViewSet):
+    queryset = Order.objects.all().select_related('user', 'table').prefetch_related('items__food')
+    serializer_class = OrderSerializer
+    permission_classes = [IsAdminOrReadOnly]
+    filter_backends = [DjangoFilterBackend]
+    filterset_fields = ['status', 'user__username']
+
+
 # Legacy view examples were removed from this file for clarity.

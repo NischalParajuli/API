@@ -1,7 +1,7 @@
-from django_filters import filterset
+from django_filters import FilterSet
 from .models import Food
 
-class FoodFilter(filterset.FilterSet):
+class FoodFilter(FilterSet):
     class Meta:
         model = Food
         fields = {

@@ -8,6 +8,7 @@ router = routers.SimpleRouter()
 router.register('category', CategoryModelViewSet, basename='category')
 router.register('table', TableModelViewSet, basename='table')
 router.register('food', FoodModelViewSet, basename='food')
+router.register('order', OrderModelViewSet, basename='order')
 
 
 urlpatterns = [

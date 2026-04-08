@@ -40,5 +40,6 @@ class Order(models.Model):
       return f"{self.user} - {self.total_price}"
 
 class OrderItem(models.Model):
-   order = models.ForeignKey(Order,on_delete=models.PROTECT)
-   food = models.ForeignKey(Food, on_delete=models.PROTECT)
+   order = models.ForeignKey(Order,on_delete=models.PROTECT,related_name='items')
+   food = models.ForeignKey(Food, on_delete=models.PROTECT,related_name='items')
+   quantity = models.PositiveIntegerField(default=1)

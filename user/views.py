@@ -8,17 +8,17 @@ class LoginView(APIView):
     """Authenticate users and return an auth token."""
 
     def post(self, request):
-        username = request.data.get('username')
+        phone = request.data.get('phone')
         password = request.data.get('password')
 
-        if username == '' or password == '':
-            return Response({"detail": "Username and password are required."}, status=400)
+        if phone == '' or password == '':
+            return Response({"detail": "Phone and password are required."}, status=400)
 
-        user = authenticate(username=username, password=password)
+        user = authenticate(phone=phone, password=password)
         if user:
             token, _ = Token.objects.get_or_create(user=user)
             return Response({
-                "username": f"Login successful for user: {username}",
+                "username": f"Login successful for user: {phone}",
                 "token": token.key,
             })
 

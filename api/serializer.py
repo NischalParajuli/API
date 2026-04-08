@@ -37,3 +37,35 @@ class FoodSerializer(serializers.ModelSerializer):
     def get_price_with_discount(self, food):
         """Calculate discounted price."""
         return food.price - food.price * 0.1
+    
+class OrderItemSerializer(serializers.ModelSerializer):
+    food = serializers.StringRelatedField(read_only=True)
+    food_id = serializers.PrimaryKeyRelatedField(queryset=Food.objects.all())
+    class Meta:
+        model = OrderItem
+        fields = ['food_id','food','quantity']
+    
+
+
+class OrderSerializer(serializers.ModelSerializer):
+    user = serializers.HiddenField(default=serializers.CurrentUserDefault())
+    order_items = OrderItemSerializer(many=True)
+    status = serializers.CharField(read_only=True)
+    total_price = serializers.IntegerField(read_only=True)
+    
+    class Meta:
+        model = Order
+        fields = ['id','user','table','status','total_price','order_items']
+
+    def create(self, validated_data):
+        order_items_data = validated_data.pop('order_items')
+        order = Order.objects.create(**validated_data)
+        total = 0
+        for item_data in order_items_data:
+            food = item_data['food_id']
+            quantity = item_data.get('quantity', 1)
+            OrderItem.objects.create(order=order, food=food, quantity=quantity)
+            total += food.price * quantity
+        order.total_price = total
+        order.save()
+        return order
